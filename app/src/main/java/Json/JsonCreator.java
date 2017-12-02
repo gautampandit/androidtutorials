@@ -20,7 +20,10 @@ public class JsonCreator {
             JSONArray jsonArray = new JSONArray();
             for(int i = 0; i < person.getPersonContact().size(); i++){
                 JSONObject jobj = new JSONObject();
-                jobj.put("phone", person.getPersonContact().get(i));
+                if(i == 0)
+                jobj.put("phone", person.getPersonContact().get(i).getHomephnumber());
+                if(i == 1)
+                    jobj.put("phone", person.getPersonContact().get(i).getOfficephnumber());
                 jsonArray.put(jobj);
             }
             jsonObject.put("contact", jsonArray);
@@ -28,7 +31,10 @@ public class JsonCreator {
             JSONArray jsonArray1 = new JSONArray();
             for(int i = 0; i < person.getPersonAddress().size(); i++){
                 JSONObject jobj = new JSONObject();
-                jobj.put("address", person.getPersonAddress().get(i));
+                if(i == 0)
+                jobj.put("address", person.getPersonAddress().get(i).getHomeAddress());
+                if(i == 1)
+                    jobj.put("address", person.getPersonAddress().get(i).getOfficeAddress());
                 jsonArray1.put(jobj);
             }
             jsonObject.put("location", jsonArray1);
