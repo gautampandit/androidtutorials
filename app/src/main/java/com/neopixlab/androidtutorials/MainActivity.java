@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import Json.JsonCreator;
+import Json.JsonReader;
 import Json.PersonData;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
             jsonStringToPrint = JsonCreator.createJson(pd.getPersonObj());
         }
         System.out.println("Test Data : "+jsonStringToPrint);
+        System.out.println("*********************************************");
+        JsonReader.readJsonString(jsonStringToPrint);
     }//createJson
 
 }//MainActivity
