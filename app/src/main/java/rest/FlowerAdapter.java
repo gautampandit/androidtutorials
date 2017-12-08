@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,10 +32,17 @@ public class FlowerAdapter extends ArrayAdapter{
     private Context context;
     private List<Flower> flowerList;
 
+    private LruCache<Integer, Bitmap> imageCache;
+
     public FlowerAdapter(@NonNull Context context, @LayoutRes int resource, List<Flower> objects) {
         super(context, resource, objects);
         this.context = context;
         this.flowerList = objects;
+
+        final int maxmemory = (int)(Runtime.getRuntime().maxMemory() / 1024);
+        final int cachesize = maxmemory / 8;
+
+        imageCache = new LruCache<>(cachesize);
     }
 
     @NonNull
@@ -47,7 +55,9 @@ public class FlowerAdapter extends ArrayAdapter{
         TextView tv = (TextView) view.findViewById(R.id.textView1);
         tv.setText(flower.getName());
 
-        if(flower.getBitmap() != null){
+        Bitmap bitmap = imageCache.get(flower.getProductId());
+
+        if(bitmap != null){
             ImageView iv = (ImageView)view.findViewById(R.id.imageView1);
             iv.setImageBitmap(flower.getBitmap());
         }else{
@@ -96,7 +106,8 @@ public class FlowerAdapter extends ArrayAdapter{
         protected void onPostExecute(FlowerAndView flowerAndView) {
             ImageView iv = (ImageView)flowerAndView.view.findViewById(R.id.imageView1);
             iv.setImageBitmap(flowerAndView.bitmap);
-            flowerAndView.flower.setBitmap(flowerAndView.bitmap);
+      //      flowerAndView.flower.setBitmap(flowerAndView.bitmap);
+            imageCache.put(flowerAndView.flower.getProductId(), flowerAndView.bitmap);
         }//onpostexecute
     }//ImageLoader
 
